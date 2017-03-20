@@ -1,11 +1,11 @@
 package main
 
 import (
-	_ "github.com/niyanchun/k8s-client/routers"
+	_ "github.com/niyanchun/k8s-middleware/routers"
 
 	"github.com/astaxie/beego"
 
-	_ "github.com/niyanchun/k8s-client/models"
+	_ "github.com/niyanchun/k8s-middleware/models"
 )
 
 func main() {

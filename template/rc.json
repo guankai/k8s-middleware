@@ -1,0 +1,32 @@
+{
+    "kind": "string", // v1
+    "apiVersion": "string", // ReplicationController
+    "metadata": {
+        "name": "string",
+        "namespace": "string"
+    },
+    "spec": {
+        "replicas": 0,
+        "selector": {},
+        "template": {
+            "metadata": {
+                "labels": {}
+            },
+            "spec": {
+                "containers": [{
+                    "name": "string",
+                    "image": "string",
+                    "ports": [{
+                        "containerPort": 0
+                    }],
+                    "env": [{
+                        "name": "string",
+                        "value": "string"
+                    }],
+                    "imagePullPolicy": "string" // One of Always, Never, IfNotPresent.
+                }],
+                "restartPolicy": "string" // One of Always, OnFailure, Never.
+            }
+        }
+    }
+}

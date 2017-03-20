@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/niyanchun/k8s-client/models"
+	"github.com/niyanchun/k8s-middleware/models"
 	"encoding/json"
 
 	"github.com/astaxie/beego"

@@ -228,6 +228,69 @@
                 }
             }
         },
+        "/rc/": {
+            "post": {
+                "tags": [
+                    "rc"
+                ],
+                "description": "create Replication Controller",
+                "operationId": "RCController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "rc_params",
+                        "description": "required params for RC",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ReplicationControllerCopy"
+                        }
+                    }
+                ]
+            }
+        },
+        "/rc/{namespace}": {
+            "get": {
+                "tags": [
+                    "rc"
+                ],
+                "description": "get Replication Controller in specified namespace",
+                "operationId": "RCController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "namespace",
+                        "description": "namespace of the rc resources",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/rc/{rc_name}": {
+            "delete": {
+                "tags": [
+                    "rc"
+                ],
+                "description": "delete ReplicationController",
+                "operationId": "RCController.Delete",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "rc_name",
+                        "description": "replication controller name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/user/": {
             "get": {
                 "tags": [
@@ -441,6 +504,10 @@
                 }
             }
         },
+        "ReplicationControllerCopy": {
+            "title": "ReplicationControllerCopy",
+            "type": "object"
+        },
         "User": {
             "title": "User",
             "type": "object",
@@ -476,6 +543,10 @@
         {
             "name": "namespace",
             "description": "Operations about Namespace\n"
+        },
+        {
+            "name": "rc",
+            "description": "Operations about Replication Controllers\n"
         }
     ]
 }

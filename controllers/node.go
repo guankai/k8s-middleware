@@ -1,15 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/niyanchun/k8s-client/models"
+	"github.com/niyanchun/k8s-middleware/models"
 	"github.com/astaxie/beego/logs"
 	"net/http"
 )
 
 // Operations about Nodes
 type NodeController struct {
-	beego.Controller
+	BaseController
 }
 
 // @Title Get
@@ -19,13 +18,9 @@ type NodeController struct {
 // @router /:name [get]
 func (n *NodeController) Get() {
 	name := n.GetString(":name")
-	if len(name) == 0 {
-		logs.Error("name is empty")
-		n.CustomAbort(http.StatusBadRequest, "name is empty")
-	}
+	n.CheckEmpty(name, "name")
 
 	logs.Debug("node name: %s", name)
-
 	node, err:= models.Client.GetNode(name)
 	if err != nil {
 		logs.Error("get node error %v", err)

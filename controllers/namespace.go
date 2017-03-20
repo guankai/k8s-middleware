@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/niyanchun/k8s-client/models"
-	"github.com/astaxie/beego/logs"
 	"net/http"
+
+	"github.com/astaxie/beego/logs"
+	"github.com/niyanchun/k8s-middleware/models"
 )
 
 // Operations about Namespace
 type NamespaceController struct {
-	beego.Controller
+	BaseController
 }
 
 // @Title Get
@@ -34,10 +34,7 @@ func (ns *NamespaceController) Get() {
 // @router / [post]
 func (ns *NamespaceController) Post() {
 	name := ns.GetString("namespace")
-	if len(name) == 0 {
-		logs.Error("namespace is empty")
-		ns.CustomAbort(http.StatusBadRequest, "namespace is empty")
-	}
+	ns.CheckEmpty(name, "namespace")
 
 	namespace, err := models.Client.CreateNamespace(name)
 	if err != nil {
@@ -55,10 +52,7 @@ func (ns *NamespaceController) Post() {
 // @router /:namespace [delete]
 func (ns *NamespaceController) Delete() {
 	name := ns.GetString(":namespace")
-	if len(name) == 0 {
-		logs.Error("namespace is empty")
-		ns.CustomAbort(http.StatusBadRequest, "namespace is empty")
-	}
+	ns.CheckEmpty(name, "namespace")
 
 	err := models.Client.DeleteNamespace(name)
 	if err != nil {

@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"github.com/niyanchun/k8s-client/controllers"
+	"github.com/niyanchun/k8s-middleware/controllers"
 
 	"github.com/astaxie/beego"
 )
@@ -33,6 +33,11 @@ func init() {
 		beego.NSNamespace("/namespace",
 			beego.NSInclude(
 				&controllers.NamespaceController{},
+			),
+		),
+		beego.NSNamespace("/rc",
+			beego.NSInclude(
+				&controllers.RCController{},
 			),
 		),
 	)
