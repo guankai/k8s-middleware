@@ -14,13 +14,14 @@ type RCController struct {
 	BaseController
 }
 
+
 // TODO: 支持使用labels过滤查询到的RC
 // @Title Get
-// @Description get Replication Controller in specified namespace
-// @Param namespace path string true "namespace of the rc resources"
-// @router /:namespace [get]
-func (rc *RCController) Get() {
-	namespace := rc.GetString(":namespace")
+// @Description List all Replication Controller in specified namespace
+// @Param namespace query string true "namespace of the rc resources"
+// @router / [get]
+func (rc *RCController) List() {
+	namespace := rc.GetString("namespace")
 	rc.CheckEmpty(namespace, "namespace")
 
 	rc_list, err := models.Client.ListReplicationControllers(namespace)
@@ -30,6 +31,27 @@ func (rc *RCController) Get() {
 	}
 
 	rc.Data["json"] = rc_list
+	rc.ServeJSON()
+}
+
+// @Title Get
+// @Description Get Replication Controller details
+// @Param namespace query string true "namespace of the rc resources"
+// @Param rc_name path string true "replicationController name"
+// @router /:rc_name [get]
+func (rc *RCController) Get() {
+	namespace := rc.GetString("namespace")
+	rc.CheckEmpty(namespace, "namespace")
+	rc_name := rc.GetString(":rc_name")
+	rc.CheckEmpty(rc_name, "rc_name")
+
+	rc_detail, err := models.Client.GetReplicationController(namespace, rc_name)
+	if err != nil {
+		logs.Error("get RC error, %v", err)
+		rc.CustomAbort(http.StatusInternalServerError, "get RC error")
+	}
+
+	rc.Data["json"] = rc_detail
 	rc.ServeJSON()
 }
 

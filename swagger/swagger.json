@@ -69,10 +69,7 @@
                     "node"
                 ],
                 "description": "List all nodes",
-                "operationId": "NodeController.List",
-                "responses": {
-                    "200": {}
-                }
+                "operationId": "NodeController.List"
             }
         },
         "/node/{name}": {
@@ -90,10 +87,7 @@
                         "required": true,
                         "type": "string"
                     }
-                ],
-                "responses": {
-                    "200": {}
-                }
+                ]
             }
         },
         "/object/": {
@@ -228,7 +222,66 @@
                 }
             }
         },
+        "/pod/": {
+            "get": {
+                "tags": [
+                    "pod"
+                ],
+                "description": "list all pods",
+                "operationId": "PodController.Get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/pod/{pod_name}": {
+            "get": {
+                "tags": [
+                    "pod"
+                ],
+                "description": "get pod details",
+                "operationId": "PodController.Get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "pod_name",
+                        "description": "pod name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/rc/": {
+            "get": {
+                "tags": [
+                    "rc"
+                ],
+                "description": "List all Replication Controller in specified namespace",
+                "operationId": "RCController.Get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace of the rc resources",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "rc"
@@ -248,25 +301,30 @@
                 ]
             }
         },
-        "/rc/{namespace}": {
+        "/rc/{rc_name}": {
             "get": {
                 "tags": [
                     "rc"
                 ],
-                "description": "get Replication Controller in specified namespace",
+                "description": "Get Replication Controller details",
                 "operationId": "RCController.Get",
                 "parameters": [
                     {
-                        "in": "path",
+                        "in": "query",
                         "name": "namespace",
                         "description": "namespace of the rc resources",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "rc_name",
+                        "description": "replicationController name",
+                        "required": true,
+                        "type": "string"
                     }
                 ]
-            }
-        },
-        "/rc/{rc_name}": {
+            },
             "delete": {
                 "tags": [
                     "rc"
@@ -547,6 +605,10 @@
         {
             "name": "rc",
             "description": "Operations about Replication Controllers\n"
+        },
+        {
+            "name": "pod",
+            "description": "Operations about pod\n"
         }
     ]
 }

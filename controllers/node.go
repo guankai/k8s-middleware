@@ -11,10 +11,26 @@ type NodeController struct {
 	BaseController
 }
 
+
+// @Title List
+// @Description List all nodes
+// @router / [get]
+func (n *NodeController) ListNodes() {
+	nodes, err := models.Client.ListNodes()
+	if err != nil {
+		logs.Error("List nodes error %v", err)
+		n.CustomAbort(http.StatusInternalServerError, err.Error())
+	}
+
+	logs.Debug("nodes: %v", nodes)
+
+	n.Data["json"] = nodes
+	n.ServeJSON()
+}
+
 // @Title Get
 // @Description get node information by name
 // @Param name path string true "node name"
-// @Success 200
 // @router /:name [get]
 func (n *NodeController) Get() {
 	name := n.GetString(":name")
@@ -31,20 +47,3 @@ func (n *NodeController) Get() {
 	n.ServeJSON()
 }
 
-
-// @Title List
-// @Description List all nodes
-// @Success 200
-// @router / [get]
-func (n *NodeController) ListNodes() {
-	nodes, err := models.Client.ListNodes()
-	if err != nil {
-		logs.Error("List nodes error %v", err)
-		n.CustomAbort(http.StatusInternalServerError, err.Error())
-	}
-
-	logs.Debug("nodes: %v", nodes)
-
-	n.Data["json"] = nodes
-	n.ServeJSON()
-}
