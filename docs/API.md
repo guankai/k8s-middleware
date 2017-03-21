@@ -14,6 +14,7 @@
 一个App包含一个Service和一个ReplicationController，对用户展现整个APP，不区分后者。但前端调用接口时需要区分。
 
 - 创建/部署：调用创建Service和RC的接口，副本数为1
+- 查询：
 - 启动：将副本个数设置为1
 - 停止：将副本个数设置为0
 - 删除：调用Service和RC的删除接口

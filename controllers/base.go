@@ -20,3 +20,11 @@ func (bc *BaseController) CheckEmpty(param, paramToLog string) {
 		bc.CustomAbort(http.StatusBadRequest, s)
 	}
 }
+
+func (bc *BaseController) CheckError(err error, errMsg string, errCode int) {
+	if err != nil {
+		s := errMsg + "," + err.Error()
+		logs.Error(s)
+		bc.CustomAbort(errCode, s)
+	}
+}
