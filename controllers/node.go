@@ -47,3 +47,5 @@ func (n *NodeController) Get() {
 	n.ServeJSON()
 }
 
+
+// TODO: UpdateNode()

@@ -58,3 +58,6 @@ func (p *PodController) Get() {
 	p.Data["json"] = pod_detail
 	p.ServeJSON()
 }
+
+
+// TODO: UpdatePod()

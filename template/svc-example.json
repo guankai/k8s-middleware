@@ -1,0 +1,19 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "myweb",
+    "namespace": "default"
+  },
+  "spec": {
+    "type": "NodePort",
+    "ports": [
+      {
+        "port": 8080
+      }
+    ],
+    "selector": {
+      "app": "myweb"
+    }
+  }
+}

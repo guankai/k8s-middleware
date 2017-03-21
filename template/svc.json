@@ -1,0 +1,17 @@
+{
+  "kind": "string",  //v1
+  "apiVersion": "string",
+  "metadata": {
+    "name": "string",
+    "namespace": "string"
+  },
+  "spec": {
+    "type": "string", // NodePort
+    "ports": [
+      {
+        "port": 0 // targetPort is same as port
+      }
+    ],
+    "selector": {}
+  }
+}

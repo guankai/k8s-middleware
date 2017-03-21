@@ -29,15 +29,15 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NodeController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NodeController"],
 		beego.ControllerComments{
-			Method: "Get",
-			Router: `/:name`,
+			Method: "ListNodes",
+			Router: `/`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NodeController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NodeController"],
 		beego.ControllerComments{
-			Method: "ListNodes",
-			Router: `/`,
+			Method: "Get",
+			Router: `/:name`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
@@ -76,10 +76,31 @@ func init() {
 			AllowHTTPMethods: []string{"delete"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:PodController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:PodController"],
+		beego.ControllerComments{
+			Method: "List",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:PodController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:PodController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/:pod_name`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"],
+		beego.ControllerComments{
+			Method: "List",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"],
 		beego.ControllerComments{
 			Method: "Get",
-			Router: `/:namespace`,
+			Router: `/:rc_name`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
@@ -92,8 +113,43 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"],
 		beego.ControllerComments{
+			Method: "Put",
+			Router: `/`,
+			AllowHTTPMethods: []string{"put"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:RCController"],
+		beego.ControllerComments{
 			Method: "Delete",
 			Router: `/:rc_name`,
+			AllowHTTPMethods: []string{"delete"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],
+		beego.ControllerComments{
+			Method: "List",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/:service_name`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],
+		beego.ControllerComments{
+			Method: "Post",
+			Router: `/`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],
+		beego.ControllerComments{
+			Method: "Delete",
+			Router: `/:svc_name`,
 			AllowHTTPMethods: []string{"delete"},
 			Params: nil})
 

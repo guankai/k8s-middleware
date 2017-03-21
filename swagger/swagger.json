@@ -282,6 +282,24 @@
                     }
                 ]
             },
+            "put": {
+                "tags": [
+                    "rc"
+                ],
+                "description": "update Replication Controller",
+                "operationId": "RCController.Put",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "rc_params",
+                        "description": "required params for RC",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ReplicationControllerCopy"
+                        }
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "rc"
@@ -343,6 +361,92 @@
                         "in": "path",
                         "name": "rc_name",
                         "description": "replication controller name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/service/": {
+            "get": {
+                "tags": [
+                    "service"
+                ],
+                "description": "list all services",
+                "operationId": "ServiceController.List",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "service"
+                ],
+                "description": "create service",
+                "operationId": "ServiceController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "service",
+                        "description": "service struct params",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ServiceCopy"
+                        }
+                    }
+                ]
+            }
+        },
+        "/service/{service_name}": {
+            "get": {
+                "tags": [
+                    "service"
+                ],
+                "description": "get service details",
+                "operationId": "ServiceController.Get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "service_name",
+                        "description": "service name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/service/{svc_name}": {
+            "delete": {
+                "tags": [
+                    "service"
+                ],
+                "description": "delete a service",
+                "operationId": "ServiceController.Delete",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "svc_name",
+                        "description": "service name",
                         "required": true,
                         "type": "string"
                     }
@@ -566,6 +670,10 @@
             "title": "ReplicationControllerCopy",
             "type": "object"
         },
+        "ServiceCopy": {
+            "title": "ServiceCopy",
+            "type": "object"
+        },
         "User": {
             "title": "User",
             "type": "object",
@@ -609,6 +717,10 @@
         {
             "name": "pod",
             "description": "Operations about pod\n"
+        },
+        {
+            "name": "service",
+            "description": "Operations about service\n"
         }
     ]
 }

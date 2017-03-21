@@ -17,7 +17,11 @@ func init() {
 	Client = k8s_client.NewClient(k8s_url, username, password)
 }
 
-// just for shut up the bee gendoc, no other use
+// these ***copy struct just for shut up the bee gendoc, no other use
 type ReplicationControllerCopy struct {
 	v1.ReplicationController
+}
+
+type ServiceCopy struct {
+	v1.Service
 }
