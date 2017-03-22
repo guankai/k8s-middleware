@@ -1,12 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Innovation Platform Kubernetes Middleware API",
-        "description": "just as the title describes, no more",
+        "title": "beego Test API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
         "version": "1.0.0",
         "termsOfService": "http://beego.me/",
         "contact": {
-            "email": "ych.ni@hnair.com"
+            "email": "astaxie@gmail.com"
         },
         "license": {
             "name": "Url http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -31,58 +31,12 @@
                 ]
             }
         },
-        "/app/op/{app_name}": {
-            "post": {
-                "tags": [
-                    "app"
-                ],
-                "description": "stop/start a app",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "namespace",
-                        "description": "namespace",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "path",
-                        "name": "app_name",
-                        "description": "app name",
-                        "required": true,
-                        "type": "string"
-                    }
-                ]
-            }
-        },
         "/app/{app_name}": {
             "get": {
                 "tags": [
                     "app"
                 ],
                 "description": "get app detail: service + RC + Pod",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "namespace",
-                        "description": "namespace",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "path",
-                        "name": "app_name",
-                        "description": "app name",
-                        "required": true,
-                        "type": "string"
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "app"
-                ],
-                "description": "delete a app",
                 "parameters": [
                     {
                         "in": "query",
@@ -339,28 +293,11 @@
                     }
                 ]
             },
-            "put": {
-                "tags": [
-                    "service"
-                ],
-                "description": "update a service",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "service",
-                        "description": "service struct params",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ServiceCopy"
-                        }
-                    }
-                ]
-            },
             "post": {
                 "tags": [
                     "service"
                 ],
-                "description": "create a service",
+                "description": "create service",
                 "operationId": "ServiceController.Post",
                 "parameters": [
                     {
@@ -427,6 +364,41 @@
         }
     },
     "definitions": {
+        "Object": {
+            "title": "Object",
+            "type": "object",
+            "properties": {
+                "ObjectId": {
+                    "type": "string"
+                },
+                "PlayerName": {
+                    "type": "string"
+                },
+                "Score": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "Profile": {
+            "title": "Profile",
+            "type": "object",
+            "properties": {
+                "Address": {
+                    "type": "string"
+                },
+                "Age": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "Gender": {
+                    "type": "string"
+                }
+            }
+        },
         "ReplicationControllerCopy": {
             "title": "ReplicationControllerCopy",
             "type": "object"
@@ -434,6 +406,24 @@
         "ServiceCopy": {
             "title": "ServiceCopy",
             "type": "object"
+        },
+        "User": {
+            "title": "User",
+            "type": "object",
+            "properties": {
+                "Id": {
+                    "type": "string"
+                },
+                "Password": {
+                    "type": "string"
+                },
+                "Profile": {
+                    "$ref": "#/definitions/Profile"
+                },
+                "Username": {
+                    "type": "string"
+                }
+            }
         }
     },
     "tags": [

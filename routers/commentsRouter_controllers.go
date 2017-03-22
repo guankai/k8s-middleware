@@ -6,34 +6,6 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
-		beego.ControllerComments{
-			Method: "List",
-			Router: `/`,
-			AllowHTTPMethods: []string{"get"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
-		beego.ControllerComments{
-			Method: "Get",
-			Router: `/:app_name`,
-			AllowHTTPMethods: []string{"get"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
-		beego.ControllerComments{
-			Method: "OperateApp",
-			Router: `/op/:app_name`,
-			AllowHTTPMethods: []string{"post"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
-		beego.ControllerComments{
-			Method: "Delete",
-			Router: `/:app_name`,
-			AllowHTTPMethods: []string{"delete"},
-			Params: nil})
-
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"],
 		beego.ControllerComments{
 			Method: "Get",
@@ -172,13 +144,6 @@ func init() {
 			Method: "Post",
 			Router: `/`,
 			AllowHTTPMethods: []string{"post"},
-			Params: nil})
-
-	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],
-		beego.ControllerComments{
-			Method: "Put",
-			Router: `/`,
-			AllowHTTPMethods: []string{"put"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:ServiceController"],

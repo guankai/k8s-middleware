@@ -1,7 +1,7 @@
 // @APIVersion 1.0.0
-// @Title Innovation Platform Kubernetes Middleware API
-// @Description just as the title describes, no more
-// @Contact ych.ni@hnair.com
+// @Title beego Test API
+// @Description beego has a very cool tools to autogenerate documents for your API
+// @Contact astaxie@gmail.com
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
@@ -15,6 +15,16 @@ import (
 
 func init() {
 	ns := beego.NewNamespace("/v1",
+		//beego.NSNamespace("/object",
+		//	beego.NSInclude(
+		//		&controllers.ObjectController{},
+		//	),
+		//),
+		//beego.NSNamespace("/user",
+		//	beego.NSInclude(
+		//		&controllers.UserController{},
+		//	),
+		//),
 		beego.NSNamespace("/app",
 			beego.NSInclude(
 				&controllers.AppController{},
