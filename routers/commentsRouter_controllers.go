@@ -6,6 +6,7 @@ import (
 
 func init() {
 
+<<<<<<< HEAD
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
 		beego.ControllerComments{
 			Method: "List",
@@ -20,6 +21,8 @@ func init() {
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
+=======
+>>>>>>> parent of e68450f... 增加一些API，删除多余文件。
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"],
 		beego.ControllerComments{
 			Method: "Get",
