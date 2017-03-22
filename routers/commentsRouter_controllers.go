@@ -6,6 +6,20 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
+		beego.ControllerComments{
+			Method: "List",
+			Router: `/`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/:app_name`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"],
 		beego.ControllerComments{
 			Method: "Get",
