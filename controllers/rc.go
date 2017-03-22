@@ -16,15 +16,12 @@ type RCController struct {
 }
 
 func (rc *RCController) Prepare() {
-	// POST method's namespace is in param struct
+	namespace := rc.GetString("namespace")
 	method := rc.Ctx.Input.Method()
-	if  method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		rc.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := rc.GetString("namespace")
-	rc.CheckEmpty(namespace, "namespace")
-	logs.Debug("namespace: %s", namespace)
 	rc.namespace = namespace
 }
 

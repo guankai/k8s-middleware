@@ -15,15 +15,12 @@ type ServiceController struct {
 }
 
 func (s *ServiceController) Prepare() {
-	// POST and PUTmethod's namespace is in param struct
+	namespace := s.GetString("namespace")
 	method := s.Ctx.Input.Method()
-	if method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		s.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := s.GetString("namespace")
-	s.CheckEmpty(namespace, "namespace")
-	logs.Debug("namespace: %s", namespace)
 	s.namespace = namespace
 }
 
@@ -65,7 +62,7 @@ func (s *ServiceController) Get() {
 
 
 // @Title Post
-// @Description create service
+// @Description create a service
 // @Param service body models.ServiceCopy true "service struct params"
 // @router / [post]
 func (s *ServiceController) Post() {
@@ -77,10 +74,25 @@ func (s *ServiceController) Post() {
 	}
 
 	ret, err := models.Client.CreateService(svc.Namespace, &svc)
+	s.CheckError(err, "create service", http.StatusInternalServerError)
+
+	s.Data["json"] = ret
+	s.ServeJSON()
+}
+
+// @Description  update a service
+// @Param service body models.ServiceCopy true "service struct params"
+// @router / [put]
+func (s *ServiceController) Put() {
+	var svc v1.Service
+	err := json.Unmarshal(s.Ctx.Input.RequestBody, &svc)
 	if err != nil {
-		logs.Error("create service error, %s", err.Error())
-		s.CustomAbort(http.StatusInternalServerError, "create service error, " + err.Error())
+		logs.Error("unmarshal body error, %s", err.Error())
+		s.CustomAbort(http.StatusInternalServerError, "unmarshal body error, " + err.Error() )
 	}
+
+	ret, err := models.Client.UpdateService(svc.Namespace, &svc)
+	s.CheckError(err, "update serivce error", http.StatusInternalServerError)
 
 	s.Data["json"] = ret
 	s.ServeJSON()

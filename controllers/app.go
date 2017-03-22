@@ -15,13 +15,12 @@ type AppController struct {
 }
 
 func (app *AppController) Prepare() {
+	namespace := app.GetString("namespace")
 	method := app.Ctx.Input.Method()
-	if method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		app.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := app.GetString("namespace")
-	app.CheckEmpty(namespace, "namespace")
 	app.namespace = namespace
 }
 
@@ -90,4 +89,56 @@ func (app *AppController) Get() {
 
 	app.Data["json"] = app_details
 	app.ServeJSON()
+}
+
+
+// @Description stop/start a app
+// @Param namespace query string true "namespace"
+// @Param app_name path string true "app name"
+// @router /op/:app_name [post]
+func (app *AppController) OperateApp() {
+	app_name := app.GetString(":app_name")
+	app.CheckEmpty(app_name, "app_name")
+
+	svc, err := models.Client.GetService(app.namespace, app_name)
+	app.CheckError(err, "get service error", http.StatusInternalServerError)
+
+	labels := svc.Labels
+	rcs, err := models.Client.ListReplicationControllersWithLabel(app.namespace, labels)
+	app.CheckError(err, "get rc error", http.StatusInternalServerError)
+
+	if len(rcs.Items) != 1 {
+		logs.Error("Unknown error, RC with labels %v numbers %d", labels, len(rcs.Items))
+		app.CustomAbort(http.StatusInternalServerError, "unkonwn error")
+	}
+
+	rc := rcs.Items[0]
+	replicas := *rc.Spec.Replicas
+	if replicas > 0 {
+		*rc.Spec.Replicas = int32(0)
+	} else {
+		*rc.Spec.Replicas = int32(1)
+	}
+
+	_, err = models.Client.UpdateReplicationController(app.namespace, &rc)
+	app.CheckError(err, "update rc error", http.StatusInternalServerError)
+
+	app.Data["json"] = rc.Spec.Replicas
+	app.ServeJSON()
+}
+
+
+// @Description delete a app
+// @Param namespace query string true "namespace"
+// @Param app_name path string true "app name"
+// @router /:app_name [delete]
+func (app *AppController) Delete() {
+	app_name := app.GetString(":app_name")
+	app.CheckEmpty(app_name, "app_name")
+
+	err := models.Client.DeleteService(app.namespace, app_name)
+	app.CheckError(err, "delete service error", http.StatusInternalServerError)
+
+	err = models.Client.DeleteReplicationController(app.namespace, app_name)
+	app.CheckError(err, "delete RC error", http.StatusInternalServerError)
 }
