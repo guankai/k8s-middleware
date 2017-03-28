@@ -91,3 +91,63 @@ func (app *AppController) Get() {
 	app.Data["json"] = app_details
 	app.ServeJSON()
 }
+
+// @Description toggle app status(start, stop). 0: stopped, 1: running
+// @Param namespace query string true "namespace"
+// @Param app_name path string true "app name"
+// @router /:app_name [post]
+func (app *AppController) Toggle() {
+	app_name := app.GetString(":app_name")
+	app.CheckEmpty(app_name, "app_name")
+
+	svc, err := models.Client.GetService(app.namespace, app_name)
+	app.CheckError(err, "get service error", http.StatusInternalServerError)
+
+	labels := svc.Labels
+
+	rcs, err := models.Client.ListReplicationControllersWithLabel(app.namespace, labels)
+	app.CheckError(err, fmt.Sprintf("list rc with label %s error", labels), http.StatusInternalServerError)
+
+	num := len(rcs.Items)
+	if num != 0 {
+
+	}
+
+	rc := rcs.Items[0]
+	replicas := *rc.Spec.Replicas
+
+	if replicas != 0 {
+		*rc.Spec.Replicas = 0
+	} else {
+		*rc.Spec.Replicas = 1
+	}
+
+	ret, err := models.Client.UpdateReplicationController(app.namespace, &rc)
+	app.CheckError(err, "update rc error", http.StatusInternalServerError)
+
+	app.Data["json"] = ret.Spec.Replicas
+	app.ServeJSON()
+}
+
+// @Description delete an App
+// @Param namespace query string true "namespace"
+// @Param app_name path string true "app name"
+// @router / [delete]
+func (app *AppController) Delete() {
+	app_name := app.GetString(":app_name")
+	app.CheckEmpty(app_name, "app_name")
+
+	err1 := models.Client.DeleteReplicationController(app.namespace, app_name)
+	if err1 != nil {
+		logs.Error("delete RC error: " + err1.Error())
+	}
+
+	err2 := models.Client.DeleteService(app.namespace, app_name)
+	if err2 != nil {
+		logs.Error("delete service error:" + err2.Error())
+	}
+
+	if err1 != nil || err2 != nil {
+		app.CustomAbort(http.StatusInternalServerError, "delete failed")
+	}
+}

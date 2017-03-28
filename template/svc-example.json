@@ -3,7 +3,7 @@
   "apiVersion": "v1",
   "metadata": {
     "name": "myweb",
-    "namespace": "default"
+    "namespace": "test"
   },
   "spec": {
     "type": "NodePort",

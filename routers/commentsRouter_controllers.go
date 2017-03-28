@@ -20,6 +20,20 @@ func init() {
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
+		beego.ControllerComments{
+			Method: "Toggle",
+			Router: `/:app_name`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:AppController"],
+		beego.ControllerComments{
+			Method: "Delete",
+			Router: `/`,
+			AllowHTTPMethods: []string{"delete"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"] = append(beego.GlobalControllerRouter["github.com/niyanchun/k8s-middleware/controllers:NamespaceController"],
 		beego.ControllerComments{
 			Method: "Get",

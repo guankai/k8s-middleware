@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"bitbucket.org/amdatulabs/amdatu-kubernetes-go/api/v1"
+	"encoding/json"
 	"github.com/astaxie/beego/logs"
 	"github.com/niyanchun/k8s-middleware/models"
 	"net/http"
-	"bitbucket.org/amdatulabs/amdatu-kubernetes-go/api/v1"
-	"encoding/json"
 )
 
 // Operations about service
@@ -43,7 +43,6 @@ func (s *ServiceController) List() {
 	s.ServeJSON()
 }
 
-
 // @Title Get
 // @Description get service details
 // @Param namespace query string true "namespace"
@@ -56,13 +55,12 @@ func (s *ServiceController) Get() {
 	svc_detail, err := models.Client.GetService(s.namespace, service_name)
 	if err != nil {
 		logs.Error("get service error, %v", err)
-		s.CustomAbort(http.StatusInternalServerError, "get service error, " + err.Error())
+		s.CustomAbort(http.StatusInternalServerError, "get service error, "+err.Error())
 	}
 
 	s.Data["json"] = svc_detail
 	s.ServeJSON()
 }
-
 
 // @Title Post
 // @Description create service
@@ -73,13 +71,13 @@ func (s *ServiceController) Post() {
 	err := json.Unmarshal(s.Ctx.Input.RequestBody, &svc)
 	if err != nil {
 		logs.Error("unmarshal body error, %s", err.Error())
-		s.CustomAbort(http.StatusInternalServerError, "unmarshal body error, " + err.Error() )
+		s.CustomAbort(http.StatusInternalServerError, "unmarshal body error, "+err.Error())
 	}
 
 	ret, err := models.Client.CreateService(svc.Namespace, &svc)
 	if err != nil {
 		logs.Error("create service error, %s", err.Error())
-		s.CustomAbort(http.StatusInternalServerError, "create service error, " + err.Error())
+		s.CustomAbort(http.StatusInternalServerError, "create service error, "+err.Error())
 	}
 
 	s.Data["json"] = ret
@@ -98,6 +96,6 @@ func (s *ServiceController) Delete() {
 	err := models.Client.DeleteService(s.namespace, svc_name)
 	if err != nil {
 		logs.Error("delete service error, %s", err.Error())
-		s.CustomAbort(http.StatusInternalServerError, "delete service error, " + err.Error())
+		s.CustomAbort(http.StatusInternalServerError, "delete service error, "+err.Error())
 	}
 }

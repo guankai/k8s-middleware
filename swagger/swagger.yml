@@ -21,11 +21,41 @@ paths:
         description: namespace
         required: true
         type: string
+    delete:
+      tags:
+      - app
+      description: delete an App
+      parameters:
+      - in: query
+        name: namespace
+        description: namespace
+        required: true
+        type: string
+      - in: path
+        name: app_name
+        description: app name
+        required: true
+        type: string
   /app/{app_name}:
     get:
       tags:
       - app
       description: 'get app detail: service + RC + Pod'
+      parameters:
+      - in: query
+        name: namespace
+        description: namespace
+        required: true
+        type: string
+      - in: path
+        name: app_name
+        description: app name
+        required: true
+        type: string
+    post:
+      tags:
+      - app
+      description: 'toggle app status(start, stop). 0: stopped, 1: running'
       parameters:
       - in: query
         name: namespace
@@ -245,48 +275,12 @@ paths:
         required: true
         type: string
 definitions:
-  Object:
-    title: Object
-    type: object
-    properties:
-      ObjectId:
-        type: string
-      PlayerName:
-        type: string
-      Score:
-        type: integer
-        format: int64
-  Profile:
-    title: Profile
-    type: object
-    properties:
-      Address:
-        type: string
-      Age:
-        type: integer
-        format: int64
-      Email:
-        type: string
-      Gender:
-        type: string
   ReplicationControllerCopy:
     title: ReplicationControllerCopy
     type: object
   ServiceCopy:
     title: ServiceCopy
     type: object
-  User:
-    title: User
-    type: object
-    properties:
-      Id:
-        type: string
-      Password:
-        type: string
-      Profile:
-        $ref: '#/definitions/Profile'
-      Username:
-        type: string
 tags:
 - name: app
   description: |
