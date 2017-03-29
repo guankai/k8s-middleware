@@ -8,7 +8,7 @@ info:
     email: astaxie@gmail.com
   license:
     name: Url http://www.apache.org/licenses/LICENSE-2.0.html
-basePath: /v1
+basePath: /k8s-middleware/v1
 paths:
   /app/:
     get:
@@ -56,6 +56,22 @@ paths:
       tags:
       - app
       description: 'toggle app status(start, stop). 0: stopped, 1: running'
+      parameters:
+      - in: query
+        name: namespace
+        description: namespace
+        required: true
+        type: string
+      - in: path
+        name: app_name
+        description: app name
+        required: true
+        type: string
+  /app/logs/{app_name}:
+    get:
+      tags:
+      - app
+      description: get app log
       parameters:
       - in: query
         name: namespace

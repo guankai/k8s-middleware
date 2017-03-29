@@ -12,7 +12,7 @@
             "name": "Url http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "basePath": "/v1",
+    "basePath": "/k8s-middleware/v1",
     "paths": {
         "/app/": {
             "get": {
@@ -35,6 +35,30 @@
                     "app"
                 ],
                 "description": "delete an App",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "namespace",
+                        "description": "namespace",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "app_name",
+                        "description": "app name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/app/logs/{app_name}": {
+            "get": {
+                "tags": [
+                    "app"
+                ],
+                "description": "get app log",
                 "parameters": [
                     {
                         "in": "query",

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/niyanchun/k8s-middleware/models"
 	"github.com/astaxie/beego/logs"
+	"github.com/niyanchun/k8s-middleware/models"
 	"net/http"
 )
 
@@ -14,13 +14,15 @@ type PodController struct {
 
 func (p *PodController) Prepare() {
 	namespace := p.GetString("namespace")
-	p.CheckEmpty(namespace, "namespace")
+
+	method := p.Ctx.Input.Method()
+	if method != http.MethodPost && method != http.MethodPut {
+		p.CheckEmpty(namespace, "namespace")
+	}
 
 	logs.Debug("namespace: %s", namespace)
-
 	p.namespace = namespace
 }
-
 
 // TODO: 支持使用labels过滤查询到的Pod
 // @Title Get
@@ -37,7 +39,6 @@ func (p *PodController) List() {
 	p.Data["json"] = pod_list
 	p.ServeJSON()
 }
-
 
 // @Title Get
 // @Description get pod details
@@ -58,6 +59,3 @@ func (p *PodController) Get() {
 	p.Data["json"] = pod_detail
 	p.ServeJSON()
 }
-
-
-// TODO: UpdatePod()

@@ -15,14 +15,13 @@ type ServiceController struct {
 }
 
 func (s *ServiceController) Prepare() {
-	// POST and PUTmethod's namespace is in param struct
+	namespace := s.GetString("namespace")
+
 	method := s.Ctx.Input.Method()
-	if method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		s.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := s.GetString("namespace")
-	s.CheckEmpty(namespace, "namespace")
 	logs.Debug("namespace: %s", namespace)
 	s.namespace = namespace
 }

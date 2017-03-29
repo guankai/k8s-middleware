@@ -3,27 +3,26 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/astaxie/beego/logs"
-	"github.com/niyanchun/k8s-middleware/models"
 	"bitbucket.org/amdatulabs/amdatu-kubernetes-go/api/v1"
 	"encoding/json"
+	"github.com/astaxie/beego/logs"
+	"github.com/niyanchun/k8s-middleware/models"
 )
 
 // Operations about Replication Controllers
 type RCController struct {
 	BaseController
-	namespace  string
+	namespace string
 }
 
 func (rc *RCController) Prepare() {
-	// POST method's namespace is in param struct
+	namespace := rc.GetString("namespace")
+
 	method := rc.Ctx.Input.Method()
-	if  method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		rc.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := rc.GetString("namespace")
-	rc.CheckEmpty(namespace, "namespace")
 	logs.Debug("namespace: %s", namespace)
 	rc.namespace = namespace
 }
@@ -63,14 +62,13 @@ func (rc *RCController) Get() {
 	rc.ServeJSON()
 }
 
-
 // @Title Post
 // @Description create Replication Controller
 // @Param rc_params body models.ReplicationControllerCopy true "required params for RC"
 // @router / [post]
 func (rc *RCController) Post() {
 	var err error
-	var	rc_inst v1.ReplicationController
+	var rc_inst v1.ReplicationController
 
 	err = json.Unmarshal(rc.Ctx.Input.RequestBody, &rc_inst)
 	if err != nil {
@@ -78,7 +76,7 @@ func (rc *RCController) Post() {
 		rc.CustomAbort(http.StatusInternalServerError, "unmarshal rc params error")
 	}
 
-	ret , err := models.Client.CreateReplicationController(rc_inst.Namespace, &rc_inst)
+	ret, err := models.Client.CreateReplicationController(rc_inst.Namespace, &rc_inst)
 	if err != nil {
 		logs.Error("create RC error, %v", err)
 		rc.CustomAbort(http.StatusInternalServerError, "create RC error")
@@ -94,7 +92,7 @@ func (rc *RCController) Post() {
 // @router / [put]
 func (rc *RCController) Put() {
 	var err error
-	var	rc_inst v1.ReplicationController
+	var rc_inst v1.ReplicationController
 
 	err = json.Unmarshal(rc.Ctx.Input.RequestBody, &rc_inst)
 	if err != nil {
@@ -102,7 +100,7 @@ func (rc *RCController) Put() {
 		rc.CustomAbort(http.StatusInternalServerError, "unmarshal rc params error")
 	}
 
-	ret , err := models.Client.UpdateReplicationController(rc_inst.Namespace, &rc_inst)
+	ret, err := models.Client.UpdateReplicationController(rc_inst.Namespace, &rc_inst)
 	if err != nil {
 		logs.Error("create RC error, %v", err)
 		rc.CustomAbort(http.StatusInternalServerError, "create RC error")

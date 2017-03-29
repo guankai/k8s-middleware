@@ -2,3 +2,6 @@ k8s-client
 k8s-middleware
 *.log
 lastupdate.tmp
+/lastupdate.tmp
+build/
+log/

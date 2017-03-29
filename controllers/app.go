@@ -6,6 +6,7 @@ import (
 
 	"github.com/astaxie/beego/logs"
 	"github.com/niyanchun/k8s-middleware/models"
+	"io/ioutil"
 )
 
 // Operations about Apps
@@ -15,13 +16,14 @@ type AppController struct {
 }
 
 func (app *AppController) Prepare() {
+	namespace := app.GetString("namespace")
+
 	method := app.Ctx.Input.Method()
-	if method == http.MethodPost || method == http.MethodPut {
-		return
+	if method != http.MethodPost && method != http.MethodPut {
+		app.CheckEmpty(namespace, "namespace")
 	}
 
-	namespace := app.GetString("namespace")
-	app.CheckEmpty(namespace, "namespace")
+	logs.Debug("namespace: %s", namespace)
 	app.namespace = namespace
 }
 
@@ -37,7 +39,7 @@ func (app *AppController) List() {
 	for _, svc := range svc_list.Items {
 		a.Name = svc.Name
 
-		err, status := models.GetPodsStatus(svc.Namespace, svc.Labels)
+		err, status := models.GetPodsStatus(svc.Namespace, svc.Spec.Selector)
 		if err != nil {
 			s := fmt.Sprintf("get service %s's status error, %s", svc.Name, err.Error())
 			logs.Error(s)
@@ -61,6 +63,8 @@ func (app *AppController) Get() {
 	app_name := app.GetString(":app_name")
 	app.CheckEmpty(app_name, "app_name")
 
+	logs.Debug("app_name: %s", app_name)
+
 	var app_details models.AppDetails
 
 	service, err := models.Client.GetService(app.namespace, app_name)
@@ -71,8 +75,8 @@ func (app *AppController) Get() {
 	app.CheckError(err, "get rc error", http.StatusInternalServerError)
 	app_details.ReplicationController = *rc
 
-	labels := service.Labels
-	//pod, err := models.Client.GetPod(app.namespace, app_name)
+	labels := service.Spec.Selector
+	logs.Debug("labels: %v", labels)
 	pods, err := models.Client.ListPodsWithLabel(app.namespace, labels)
 	app.CheckError(err, "get pod error", http.StatusInternalServerError)
 
@@ -100,10 +104,11 @@ func (app *AppController) Toggle() {
 	app_name := app.GetString(":app_name")
 	app.CheckEmpty(app_name, "app_name")
 
+	logs.Debug("app: %s, ns: %s", app_name, app.namespace)
 	svc, err := models.Client.GetService(app.namespace, app_name)
 	app.CheckError(err, "get service error", http.StatusInternalServerError)
 
-	labels := svc.Labels
+	labels := svc.Spec.Selector
 
 	rcs, err := models.Client.ListReplicationControllersWithLabel(app.namespace, labels)
 	app.CheckError(err, fmt.Sprintf("list rc with label %s error", labels), http.StatusInternalServerError)
@@ -150,4 +155,41 @@ func (app *AppController) Delete() {
 	if err1 != nil || err2 != nil {
 		app.CustomAbort(http.StatusInternalServerError, "delete failed")
 	}
+}
+
+// @Description get app log
+// @Param namespace query string true "namespace"
+// @Param app_name path string true "app name"
+// @router /logs/:app_name [get]
+func (app *AppController) Log() {
+	type PodLogs struct {
+		PodName string `json:"pod_name"`
+		Log     string `json:"log"`
+	}
+
+	app_name := app.GetString(":app_name")
+	app.CheckEmpty(app_name, "app_name")
+
+	svc, err := models.Client.GetService(app.namespace, app_name)
+	app.CheckError(err, "get service error", http.StatusInternalServerError)
+
+	labels := svc.Spec.Selector
+	pods, err := models.Client.ListPodsWithLabel(app.namespace, labels)
+
+	var pod_logs []PodLogs
+	for _, pod := range pods.Items {
+		var log PodLogs
+		log.PodName = pod.Name
+		url := models.Client.Url + "/api/v1/namespaces/" + app.namespace + "/pods/" + pod.Name + "/log"
+		resp, err := http.Get(url)
+		app.CheckError(err, "get pod log error", http.StatusInternalServerError)
+
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		log.Log = string(body)
+		pod_logs = append(pod_logs, log)
+	}
+
+	app.Data["json"] = pod_logs
+	app.ServeJSON()
 }
